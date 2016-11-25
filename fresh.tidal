@@ -1,0 +1,155 @@
+infixr 1 $
+f $ x = f x
+infixl 0 &
+(&) = flip ($)
+(&-) = \x f -> x
+
+mempty
+  & mappend (sound (samples "uxay*2" (run 4))
+             & (# vowel "i")
+             & (# cutoff "100")
+             & spin 2
+            )
+  & mappend (sound (samples "uxay*4" (run 4))
+             & (# cutoff "100")
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "subroc3d:0" (run 32))
+              & (# vowel "e")
+              & spin 2
+              & (# cutoff "200")
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "latibro*8" (irand 2))
+              & (# vowel "e")
+              & (# hcutoff "2000")
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "glitch*8" "[1, 5](3,8)")
+              & (# cutoff "100")
+              & (# pan rand)
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "uxay*8" (run 8))
+             & (# cutoff "200")
+             & (# hcutoff "1000")
+             & (# gain "3")
+            )
+  &- mappend (sound (samples "glitch*8" "[1,5](3,8)")
+              & gap 2
+              & mappend (sound (samples "~ ~ ~ ~ ~ ~ glitch glitch" "4"))
+              & (# cutoff "1000")
+              & (# pan rand)
+            )
+  & d1
+
+mempty
+  & mappend ( sound (samples "[~ gabba*3, gabba*2 ~]" (run 16))
+              & (slow 2)
+              & (# speed "0.4")
+              & (# cutoff "900")
+              & (# hcutoff "50")
+            )
+  & d1
+
+mempty
+  & mappend ( sound "bev"
+              & (striateL' 8 (8/1024) 1)
+              & (# up "12")
+              & (# hcutoff "1000")
+              & (# cutoff "1000")
+              & (# gain "1.5")
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "moog" "3")
+              & (striate' 256 (2/32)) & palindrome & slow 32
+              & (# up "-12")
+            )
+  & mappend (sound "gab:3 ~ glitch:5 glitch:1"
+              & striate' 2 (1/2)
+              & (# up "-12")
+              & (# gain "0.9")
+              & (# hcutoff "900")
+            )
+  & d1
+
+mempty
+  & mappend (sound (samples "moog" "1")
+              & (striate' 256 (2/32)) & palindrome & slow 32
+              & (# up "-12")
+              & (# gain "0.9")
+            )
+  & mappend (sound "gab:3 ~ glitch:5 glitch:1"
+              & striate' 2 (1/2)
+              & (# up "-12")
+              & (# gain "0.9")
+              & (# hcutoff "200")
+            )
+  & t1 (jumpMod 4)
+
+mempty
+  &- mappend ( sound (samples "moog" "1")
+              & (striate' 256 (2/32)) & palindrome & slow 32
+              & (# up "-12")
+              & (# gain "0.7")
+            )
+  & mappend ( sound "glitch:2 ~ glitch:5 glitch:1"
+              & spread (slow) [1, 4]
+              & (# up "9")
+              & rev
+            )
+  & d1
+
+mempty
+  & mappend ( sound "glitch:5(3, 8)"
+              & (# up "0 3 12")
+              & (# hcutoff "1000")
+            )
+  & (|*| up "-5")
+  & (spin 2)
+  & (# cutoff "1000")
+  & (# room "0.2")
+  & d1
+
+mempty
+  & mappend ( sound "glitch:5(3, 8)"
+              & (# up "0 2 12")
+              & (# hcutoff "1000")
+            )
+  & (|*| up "-5")
+  & (spin 8)
+  & (# cutoff "500")
+  & (# room "0.2")
+  & d1
+
+
+mempty
+  & mappend (sound "pluck:2*8")
+  & (# speed (slow 256 coin))
+  & d1
+
+coin :: Pattern Double
+coin = ((2**) . fromIntegral . signum .(\x -> x * 2 - 1)) <$> (rand)
+fract :: (Int -> Pattern Double)
+fract 0 = return 0.5
+fract n = liftA2 (+) (((2 ** (negate (fromIntegral n)) *) <$>) . density (2 `power` n) $  coin) (fract (n - 1))
+power b 0 = 1
+power b n = b * power b (n - 1)
+
+-- Tidal doesn't have a noise function! rand and irand are continuous, stateless functions!
+
+
+
+
+
+ hush

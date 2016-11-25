@@ -1,0 +1,31 @@
+let (&) = flip ($)
+
+let (&--) = \x f -> x
+
+let r  = sound "d" in
+d2 $ slowcat [ cat [r, r, r, r]  # up "5 4 2 0"
+             , cat [r, r] # up "4 0"
+             ]
+& id
+& (# up "0 0 0 -2")
+& spin 16
+& striate' 16 (1/16) & slow 8
+& (# up "12")
+& (# (vowel "a o e i"))
+
+d1 $ sound "bev"
+& (spin 4)
+& striate' 2048 (1/64) & rev & slow 512
+& (# vowel "i")
+& (# cat [up "12", up "48"])
+& jux (# up "24")
+&-- zoom (0, 1/2)
+& (# up "-4")
+
+d3 $ sound "numbers:4"
+& striate' 8 (1/4)
+& spin 4
+& (# up "-24")
+& jux (|*| up "-12")
+
+hush
