@@ -37,22 +37,42 @@ tt x f = (slow x) . f. (slow (1/x))
 prog :: Pattern ParamMap -> Pattern ParamMap
 prog = let (>>) = flip (.) in do
   addMod $ do
-    const $ sound $ samples "dr55 ~ [dr55 dr55] dr55" "2"
-    (# gain "0.8")
-  jux $ ((2/4) ~>)
-  ((2/4) ~>)
+    const $ sound $ samples "dr55 [dr55 dr55] dr55 dr55" "4"
+    (# vowel "a e u i")
+    (# hcutoff "5000")
+    -- (# hcutoff "500")
+  -- jux $ ((1/4) <~)
+  -- ((2/4) ~>)
+  -- rev
   -- catMod [ id , trunc 0.25 ]
   -- catMod [ trunc 0.25, id ]
   -- every 2 $ trunc 0.25 >>> (0.25 ~>)
   -- tt 1 $ catMod [ id, ((4/8) ~>) ] >>> catMod [ ((4/8) ~>), id ] -- cool
+  
   addMod $ do
-    const $ sound $ samples "808bd" "1"
-    tt 2 $ catMod [slow (2/8), slow (3/8)]
-    (# gain "0.9")
-  whenmod 16 12 $ do
-    (slow 2)
-  catMod [id,  tt 1 (|*| speed "1 0 1 1")]
+    const $ sound $ samples "gab*2" "2"
+    tt 4 $ catMod [slow (2/2), slow (3/2)]
+    (# hcutoff "5000")
+
+  -- every 1 $ do
+  --   (0.25 ~>)
+  -- jux $ tt 4 $ do
+  --   catMod [trunc 0.25, id]
+    --   (# vowel "o")
+
+  addMod $ do
+    const $ sound $ samples "gab*2" "4"
+    tt 4 $ catMod [slow (2/2), slow (3/2)]
+    every 4 $ trunc 0.25
+    (# cutoff "512")
+
+  -- every 8 $ do
+  --   (slow 2)
+  -- trunc 0.125
+
+  -- catMod [id,  tt 1 (|*| speed "1 0 1 1")]
   -- tt 0.5 $ catMod [ id, trunc 0.5 ] >>> catMod [ trunc 0.5, id ] -- cool
   -- jux $ do
   --   catMod [ id, (0.5 ~>) ] >>> catMod [ id, (0.5 <~) ]
+
   --   catMod [ id, (0.5 ~>) ] >>> catMod [ id, (0.5 <~) ]
